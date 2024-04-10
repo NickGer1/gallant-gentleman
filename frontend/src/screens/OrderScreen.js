@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { createOrder, detailsOrder, payOrder } from '../actions/orderActions';
+import { detailsOrder, payOrder } from '../actions/orderActions';
 import PaypalButton from '../components/PaypalButton';
 function OrderScreen(props) {
 
   const orderPay = useSelector(state => state.orderPay);
-  const { loading: loadingPay, success: successPay, error: errorPay } = orderPay;
+  const { loading: loadingPay, success: successPay } = orderPay;
   const dispatch = useDispatch();
   useEffect(() => {
     if (successPay) {
@@ -25,7 +25,7 @@ function OrderScreen(props) {
   const orderDetails = useSelector(state => state.orderDetails);
   const { loading, order, error } = orderDetails;
 
-  return loading ? <div>Loading ...</div> : error ? <div>{error}</div> :
+  return loading ? <div>Загрузка ...</div> : error ? <div>{error}</div> :
 
     <div>
       <div className="placeorder">
@@ -33,13 +33,13 @@ function OrderScreen(props) {
           <div>
             <h3>
               Доставка
-          </h3>
+            </h3>
             <div>
               {order.shipping.address}, {order.shipping.city},
-          {order.shipping.postalCode}, {order.shipping.country},
-          </div>
+              {order.shipping.postalCode}, {order.shipping.country},
+            </div>
             <div>
-              {order.isDelivered ? "Будет доставлено " + order.deliveredAt : "Доставка в течение 5 дней"}
+              {order.isDelivered ? "Доставка будет завтра с 10:00 до 13:00 " + order.deliveredAt : "Доставка будет завтра с 10:00 до 13:00"}
             </div>
           </div>
           <div>
@@ -48,24 +48,24 @@ function OrderScreen(props) {
               При помощи: {order.payment.paymentMethod}
             </div>
             <div>
-              {order.isPaid ? "Оплата заказа " + order.paidAt : "Оплатите заказ"}
+              {order.isPaid ? "Оплачено " + order.paidAt : "Не оплачено"}
             </div>
           </div>
           <div>
             <ul className="cart-list-container">
               <li>
                 <h3>
-                  Корзина
+                 Корзина
                 </h3>
                 <div>
                   Цена
-          </div>
+                </div>
               </li>
               {
                 order.orderItems.length === 0 ?
                   <div>
                     Корзина пуста
-          </div>
+                  </div>
                   :
                   order.orderItems.map(item =>
                     <li key={item._id}>
@@ -84,7 +84,7 @@ function OrderScreen(props) {
                         </div>
                       </div>
                       <div className="cart-price">
-                        {item.price.toLocaleString()}
+                        {item.price} ₽
                       </div>
                     </li>
                   )
@@ -97,7 +97,7 @@ function OrderScreen(props) {
         <div className="placeorder-action">
           <ul>
             <li className="placeorder-actions-payment">
-              {loadingPay && <div>Окончание оплаты...</div>}
+              {loadingPay && <div>Завершение платежа...</div>}
               {!order.isPaid &&
                 <PaypalButton
                   amount={order.totalPrice}
@@ -109,21 +109,23 @@ function OrderScreen(props) {
             </li>
             <li>
               <div>Товары</div>
-              <div>{order.itemsPrice.toLocaleString()} ₽</div>
+              <div>{Math.round(order.itemsPrice)} ₽</div>
             </li>
             <li>
               <div>Доставка</div>
-              <div>{order.shippingPrice} ₽</div>
+              <div>{Math.round(order.shippingPrice)} ₽</div>
             </li>
             <li>
               <div>Налог (15% НДС)</div>
-              <div>{order.taxPrice.toLocaleString()} ₽</div>
+              <div>{Math.round(order.taxPrice)} ₽</div>
             </li>
             <li>
               <div>Итого к оплате:</div>
-              <div>${order.totalPrice.toLocaleString()} ₽</div>
+              <div>{Math.round(order.totalPrice)} ₽</div>
             </li>
           </ul>
+
+
 
         </div>
 
