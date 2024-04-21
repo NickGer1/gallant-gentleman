@@ -1,3 +1,19 @@
+Проект доступен для просмотра на удаленном сервере по ссылке: https://api.adnokulovnikita.online/
+
+API работает по ссылке: https://api.adnokulovnikita.online/api/
+
+Пример GET запроса к API на получение всех доступных калькуляторов: https://api.adnokulovnikita.online/api/products/
+
+Доступ в личные кабинеты:
+
+Администратор сайта
+Email: admin@example.com
+Пароль: 123
+
+Простой пользователь
+Email: user@mail.ru
+Пароль: 456
+
 =====[ Импорт базы данных ]=====
 1. Запустить mongo DB
 2. Создать таблицу с названием gallant_gentleman
